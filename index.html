@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Giphy Buttons</title>
+  	<style type="text/css">
+		button, div, form, input {
+			margin: 10px;
+		}
+	</style>
+</head>
+</head>
+<body>
+
+<div class="container">
+	<h1>Gif Search!</h1>	
+
+	<div id="buttonArea">
+	<button data-topic="legend of zelda">Legend of Zelda</button>	
+	</div>
+	
+	<form id="gif-form">
+		<label for="gif-input">Add a topic!</label>
+		<input type="text" id="gif-input"><br>
+		<input id="addGif" type="submit" value="Search for your gif">				
+	</form>
+
+  <div id="gifs-appear-here">
+  </div>
+
+<script src='https://code.jquery.com/jquery-3.2.0.js'></script>
+<script type="text/javascript">
+    // click event listener for all buttons
+	$("button").on("click", function() {
+		var topics = $(this).attr("data-topic");
+		var queryURL = "http://api.giphy.com/v1/gifs/search?q=" +
+		        topics + "&api_key=dc6zaTOxFJmzC&limit=10";
+		//AJAX call
+		$.ajax({
+        url: queryURL,
+        method: "GET"
+      }).done(function(response) {
+      	console.log(queryURL);
+      	console.log(response);
+
+      	var results = response.data;
+
+      	//loops through each gif, stores in div tag, adds rating info, creates image
+      	for (var i = 0; i < results.length; i++) {
+      		var topicDiv = $("<div>");
+      		var p = $("<p>").text("Rating: " + results[i].rating);
+      		var topicImage = $("<img>");
+      		topicImage.attr("src", results[i].images.fixed_height.url);
+
+      		topicDiv.append(p);
+      		topicDiv.append(topicImage);
+
+            $("#gifs-appear-here").prepend(topicDiv);
+          }
+        });
+    });
+
+
+	var topics = ['Legend of Zelda', 'The Witcher', 'Mass Effect'];
+
+	//will dynamically create buttons based on user input, and adds pre-made buttons from the array above
+	function renderButtons(){
+		
+		for (var i = 0; i < topics.legnth; i++){
+				$('#buttonArea').empty();
+			 	var a = $('<button>');
+				a.addClass('topic');
+				a.attr('data-name', topics[i]);
+				a.text(topics[i]);
+				$('#buttonArea').apppend(a);
+
+			
+		}
+	}
+
+	$('#addGif').on('click', function(){
+		var topic = $('#gif-input').val().trim();
+		topics.push(topic);
+		renderButtons();
+		return false;
+
+	})
+
+	renderButtons();
+
+</script>
+
+</div>
+</body>
+</html>
