@@ -9,14 +9,14 @@
 		}
 	</style>
 </head>
-</head>
+
 <body>
 
 <div class="container">
 	<h1>Gif Search!</h1>	
 
 	<div id="buttonArea">
-	<button data-topic="legend of zelda">Legend of Zelda</button>	
+		
 	</div>
 	
 	<form id="gif-form">
@@ -28,12 +28,16 @@
   <div id="gifs-appear-here">
   </div>
 
+
 <script src='https://code.jquery.com/jquery-3.2.0.js'></script>
 <script type="text/javascript">
+
     // click event listener for all buttons
+
+    function eventSetup(){
 	$("button").on("click", function() {
 		var topics = $(this).attr("data-topic");
-		var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
+		var queryURL = "http://api.giphy.com/v1/gifs/search?q=" +
 		        topics + "&api_key=dc6zaTOxFJmzC&limit=10";
 		//AJAX call
 		$.ajax({
@@ -59,23 +63,22 @@
           }
         });
     });
-
+};
 
 	var topics = ['Legend of Zelda', 'The Witcher', 'Mass Effect'];
 
 	//will dynamically create buttons based on user input, and adds pre-made buttons from the array above
 	function renderButtons(){
-		
-		for (var i = 0; i < topics.legnth; i++){
-				$('#buttonArea').empty();
+		$('#buttonArea').empty();		
+		for (var i = 0; i < topics.length; i++){				
 			 	var a = $('<button>');
 				a.addClass('topic');
-				a.attr('data-name', topics[i]);
+				a.attr('data-topic', topics[i]);
 				a.text(topics[i]);
-				$('#buttonArea').apppend(a);
-
+				$('#buttonArea').append(a);
 			
 		}
+		eventSetup();
 	}
 
 	$('#addGif').on('click', function(){
@@ -87,6 +90,7 @@
 	})
 
 	renderButtons();
+
 
 </script>
 
